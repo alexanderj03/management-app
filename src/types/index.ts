@@ -7,51 +7,39 @@ export interface TagColor {
 }
 
 export interface Task {
-  id: number;
-  name: string;
-  description: string;      // added
-  priority: Priority;
-  due: string;              // "YYYY-MM-DD"
-  done: boolean;
-  tags?: TagName[];         // now optional
+  id:          number;
+  name:        string;
+  description: string;
+  priority:    Priority;
+  due:         string;       // "YYYY-MM-DD"
+  done:        boolean;
+  tags?:       TagName[];
+  project_id?: number | null;
 }
-
-// What the Add Task panel collects — id and done are assigned automatically
 export type NewTaskInput = Omit<Task, "id" | "done">;
 
 export interface Project {
-  name: string;
-  sub: string;
-  color: string;
-  color2: string;
-  icon: string;
-  progress: number;
+  id:          number;
+  name:        string;
+  description: string;
+  color:       string;
+  favourite:   boolean;
 }
+
+export type NewProjectInput = Omit<Project, "id">;
 
 export interface NavItem {
-  icon: string;
+  icon:  string;
   label: string;
-  path: string;
-}
-
-export interface AddTaskPanelProps {
-  onClose: () => void;
-  onAdd: (task: NewTaskInput) => void;
-}
-
-export interface TaskTableProps {
-  rows: Task[];
-  showAdd: boolean;
-  onToggle: (id: number) => void;
-  onOpenPanel: () => void;
+  path:  string;
 }
 
 export interface SidebarProps {
-  sidebarOpen: boolean;
+  sidebarOpen:    boolean;
   onCloseSidebar: () => void;
 }
 
 export interface TopbarProps {
-  sidebarOpen: boolean;
+  sidebarOpen:     boolean;
   onToggleSidebar: () => void;
 }

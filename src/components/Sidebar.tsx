@@ -1,8 +1,25 @@
 import { NavLink } from "react-router-dom";
-import type { SidebarProps } from "../types";
-import { navMain, projects, favColors } from "../data/taskData";
+import type { SidebarProps, Project } from "../types";
+import { navMain } from "../data/taskData";
+import { getProjects } from "../lib/db";
+import { useState, useEffect } from "react";
 
 export default function Sidebar({ sidebarOpen, onCloseSidebar }: SidebarProps) {
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  const loadFavourites = () => {
+    getProjects()
+      .then(ps => setProjects(ps.filter(p => p.favourite)))
+      .catch(console.error);
+  };
+
+  useEffect(() => {
+    loadFavourites();
+
+    window.addEventListener("favourites-changed", loadFavourites);
+    return () => window.removeEventListener("favourites-changed", loadFavourites);
+  }, []);
+
   return (
     <>
       {sidebarOpen && (
@@ -32,12 +49,18 @@ export default function Sidebar({ sidebarOpen, onCloseSidebar }: SidebarProps) {
 
         <div className="nav">
           <div className="nav-section-label">Favorites</div>
-          {projects.map((p, i) => (
-            <div key={p.name} className="nav-item">
-              <span className="fav-dot" style={{ background: favColors[i % favColors.length] }} />
-              {p.name}
+          {projects.length === 0 ? (
+            <div style={{ padding: "6px 12px", fontSize: 12, color: "var(--muted2)" }}>
+              No favourites yet
             </div>
-          ))}
+          ) : (
+            projects.map(project => (
+              <div key={project.id} className="nav-item">
+                <span className="fav-dot" style={{ background: project.color }} />
+                {project.name}
+              </div>
+            ))
+          )}
         </div>
       </aside>
     </>

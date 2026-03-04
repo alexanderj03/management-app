@@ -1,36 +1,24 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { Task, NewTaskInput } from "../types";
+import type { Task, NewTaskInput, Project, NewProjectInput } from "../types";
 
-/**
- * Fetch all tasks from SQLite.
- * Returns pending tasks first (done=0), newest first within each group.
- */
-export const getTasks = (): Promise<Task[]> =>
-  invoke<Task[]>("get_tasks");
+// ─── Tasks ────────────────────────────────────────────────────────────────────
 
-/**
- * Insert a new task. Returns the created Task with its DB-assigned id.
- */
-export const addTask = (task: NewTaskInput): Promise<Task> =>
-  invoke<Task>("add_task", { task });
+export const getTasks   = (): Promise<Task[]>       => invoke<Task[]>("get_tasks");
+export const addTask    = (task: NewTaskInput)       => invoke<Task>("add_task", { task });
+export const toggleTask = (id: number, done: boolean) => invoke<void>("toggle_task", { id, done });
+export const deleteTask = (id: number)               => invoke<void>("delete_task", { id });
 
-/**
- * Flip the done state of a task by id.
- */
-export const toggleTask = (id: number, done: boolean): Promise<void> =>
-  invoke<void>("toggle_task", { id, done });
-
-/**
- * Permanently delete a task by id.
- */
-export const deleteTask = (id: number): Promise<void> =>
-  invoke<void>("delete_task", { id });
-
-/**
- * DEV ONLY — wipes all tasks and resets autoincrement.
- * The Rust side blocks this in release builds automatically.
- */
 export const resetDatabase = (): Promise<void> => {
   if (!import.meta.env.DEV) return Promise.resolve();
   return invoke<void>("reset_database");
+};
+
+// ─── Projects ─────────────────────────────────────────────────────────────────
+
+export const getProjects      = (): Promise<Project[]>              => invoke<Project[]>("get_projects");
+export const addProject       = (project: NewProjectInput)           => invoke<Project>("add_project", { project });
+export const deleteProject    = (id: number)                         => invoke<void>("delete_project", { id });
+export const toggleFavourite = async (id: number, favourite: boolean): Promise<void> => {
+  await invoke<void>("toggle_favourite", { id, favourite });
+  window.dispatchEvent(new CustomEvent("favourites-changed"));
 };

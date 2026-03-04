@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import type { Task, Priority, NewTaskInput } from "../types";
-import { projects, tagColors } from "../data/taskData";
-import { getTasks, addTask, toggleTask, deleteTask, resetDatabase } from "../lib/db";
+import type { Task, Priority, NewTaskInput, Project } from "../types";
+import { tagColors } from "../data/taskData";
+import { getTasks, addTask, toggleTask, deleteTask, resetDatabase, getProjects } from "../lib/db";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -43,6 +43,7 @@ const toDateStr = (y: number, m: number, d: number): string =>
 
 export default function Home() {
   const [tasks, setTasks]         = useState<Task[]>([]);
+  const [favProjects, setFavProjects] = useState<Project[]>([]);
   const [loading, setLoading]     = useState<boolean>(true);
   const [collDone, setCollDone]       = useState<boolean>(false);
   const [collPending, setCollPending] = useState<boolean>(false);
@@ -66,10 +67,16 @@ export default function Home() {
   // ── Load on mount ───────────────────────────────────────────────────────────
 
   useEffect(() => {
-    getTasks()
-      .then(setTasks)
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    Promise.all([
+      getTasks(),
+      getProjects(),
+    ])
+    .then(([t, ps]) => {
+      setTasks(t);
+      setFavProjects(ps.filter(p => p.favourite));
+    })
+    .catch(console.error)
+    .finally(() => setLoading(false));
   }, []);
 
   // ── Dev reset ───────────────────────────────────────────────────────────────
@@ -427,16 +434,16 @@ export default function Home() {
         </div>
 
         {!collFavs && <div className="project-grid">
-          {projects.map(p => (
+          {favProjects.map(p => (
             <div key={p.name} className="project-card">
-              <div className="project-card-top" style={{ background: `linear-gradient(135deg, ${p.color}, ${p.color2})` }}>
-                {p.icon}
+              <div className="project-card-top" style={{ background: `linear-gradient(135deg, ${p.color})` }}>
+                
               </div>
               <div className="project-card-body">
                 <div className="project-name">{p.name}</div>
-                <div className="project-meta">{p.sub}</div>
+                {/* <div className="project-meta">{p.sub}</div> */}
                 <div className="project-progress">
-                  <div className="project-progress-bar" style={{ width: `${p.progress}%`, background: p.color }} />
+                  {/* <div className="project-progress-bar" style={{ width: `${p.progress}%`, background: p.color }} /> */}
                 </div>
               </div>
             </div>
@@ -444,6 +451,7 @@ export default function Home() {
         </div>
         }
       </div>
+
     </>
   );
 }
