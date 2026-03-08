@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Task, Priority, NewTaskInput, Project } from "../types";
-import { tagColors } from "../data/taskData";
 import { getTasks, addTask, toggleTask, deleteTask, resetDatabase, getProjects } from "../lib/db";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -165,12 +164,6 @@ export default function Home() {
   };
 
   const handleClosePanel = (): void => { resetForm(); setPanelOpen(false); };
-
-  const openPanelWithProject = (id: number): void => {
-    resetForm();
-    setProjectId(id);
-    setPanelOpen(true);
-  };
 
   const handleAdd = async (): Promise<void> => {
     if (!name.trim()) { setError("Task name is required."); return; }
