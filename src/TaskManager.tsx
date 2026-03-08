@@ -7,6 +7,7 @@ import Topbar from "./components/Topbar";
 import Home from "./pages/Home";
 import Inbox from "./pages/Inbox";
 import Portfolios from "./pages/Portfolios";
+import ProjectDetail from "./pages/ProjectDetail";
 import Goals from "./pages/Goals";
 
 export default function TaskManager() {
@@ -31,6 +32,7 @@ export default function TaskManager() {
             <Route path="/home"       element={<Home />} />
             <Route path="/inbox"      element={<Inbox />} />
             <Route path="/portfolios" element={<Portfolios />} />
+            <Route path="/projects/:id"  element={<ProjectDetail />} />
             <Route path="/goals"      element={<Goals />} />
           </Routes>
         </div>

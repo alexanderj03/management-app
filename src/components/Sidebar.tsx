@@ -1,10 +1,11 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import type { SidebarProps, Project } from "../types";
 import { navMain } from "../data/taskData";
 import { getProjects } from "../lib/db";
 import { useState, useEffect } from "react";
 
 export default function Sidebar({ sidebarOpen, onCloseSidebar }: SidebarProps) {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
 
   const loadFavourites = () => {
@@ -14,8 +15,10 @@ export default function Sidebar({ sidebarOpen, onCloseSidebar }: SidebarProps) {
   };
 
   useEffect(() => {
+    // Load on mount
     loadFavourites();
 
+    // Re-fetch whenever a favourite is toggled anywhere in the app
     window.addEventListener("favourites-changed", loadFavourites);
     return () => window.removeEventListener("favourites-changed", loadFavourites);
   }, []);
@@ -55,7 +58,12 @@ export default function Sidebar({ sidebarOpen, onCloseSidebar }: SidebarProps) {
             </div>
           ) : (
             projects.map(project => (
-              <div key={project.id} className="nav-item">
+              <div
+                key={project.id}
+                className="nav-item"
+                style={{ cursor: "pointer" }}
+                onClick={() => { navigate(`/projects/${project.id}`); onCloseSidebar(); }}
+              >
                 <span className="fav-dot" style={{ background: project.color }} />
                 {project.name}
               </div>

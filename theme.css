@@ -596,3 +596,69 @@ body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--t
   color: var(--orange);
 }
 .project-card-fav.active:hover { background: rgba(245,166,35,0.15); }
+
+/* ─── PROJECT SELECTOR (Add Task Panel) ─────────────────────────────────── */
+
+.proj-selector {
+  display: flex; flex-wrap: wrap; gap: 7px;
+}
+
+.proj-selector-opt {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 12.5px; font-weight: 500;
+  cursor: pointer; transition: all 0.12s;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+}
+.proj-selector-opt:hover   { border-color: var(--muted2); color: var(--text); }
+.proj-selector-opt.selected { border-color: var(--accent); color: var(--accent); background: rgba(124,106,247,0.12); }
+
+.proj-selector-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+
+/* ─── CLICKABLE FAV PROJECT CARD ─────────────────────────────────────────── */
+
+.fav-project-card {
+  cursor: pointer;
+}
+.fav-project-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--muted2);
+}
+.fav-card-hint {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 8px;
+  transition: color 0.12s;
+}
+.fav-project-card:hover .fav-card-hint {
+  color: var(--accent);
+}
+
+/* ─── PROJECT DETAIL PAGE ────────────────────────────────────────────────── */
+
+.pd-header   { margin-bottom: 24px; }
+.pd-back     { background: none; border: none; color: var(--muted); font-size: 13px; cursor: pointer; padding: 0 0 12px; font-family: 'DM Sans', sans-serif; transition: color 0.1s; }
+.pd-back:hover { color: var(--text); }
+
+.pd-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.pd-dot       { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+.pd-title     { font-size: 22px; font-weight: 700; }
+.pd-desc      { font-size: 13.5px; color: var(--muted); margin-bottom: 8px; }
+.pd-meta      { display: flex; gap: 8px; font-size: 12.5px; color: var(--muted2); }
+
+/* Project detail uses 5-col layout (no tags column) */
+.pd-task-row,
+.pd-task-row ~ .task-table-header {
+  grid-template-columns: 36px 1fr 100px 80px 32px !important;
+}
+
+@media (max-width: 640px) {
+  .pd-task-row { grid-template-columns: 36px 1fr 80px 32px !important; }
+  .pd-task-row .priority-cell { display: none; }
+}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import type { Task, Priority, NewTaskInput, Project } from "../types";
-import { tagColors } from "../data/taskData";
 import { getTasks, addTask, toggleTask, deleteTask, resetDatabase, getProjects } from "../lib/db";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -43,7 +43,9 @@ const toDateStr = (y: number, m: number, d: number): string =>
 
 export default function Home() {
   const [tasks, setTasks]         = useState<Task[]>([]);
+  const navigate = useNavigate();
   const [favProjects, setFavProjects] = useState<Project[]>([]);
+  const [allProjects, setAllProjects] = useState<Project[]>([]);
   const [loading, setLoading]     = useState<boolean>(true);
   const [collDone, setCollDone]       = useState<boolean>(false);
   const [collPending, setCollPending] = useState<boolean>(false);
@@ -55,6 +57,7 @@ export default function Home() {
   const [description, setDesc]    = useState<string>("");
   const [priority, setPriority]   = useState<Priority>("medium");
   const [due, setDue]             = useState<string>("");
+  const [projectId, setProjectId] = useState<number | null>(null);
   const [error, setError]         = useState<string>("");
 
   // Calendar popover state
@@ -73,6 +76,7 @@ export default function Home() {
     ])
     .then(([t, ps]) => {
       setTasks(t);
+      setAllProjects(ps);
       setFavProjects(ps.filter(p => p.favourite));
     })
     .catch(console.error)
@@ -153,16 +157,22 @@ export default function Home() {
 
   const resetForm = (): void => {
     setName(""); setDesc(""); setPriority("medium");
-    setDue(""); setError(""); setCalOpen(false);
+    setDue(""); setProjectId(null); setError(""); setCalOpen(false);
     setCalYear(today.getFullYear()); setCalMonth(today.getMonth());
   };
 
   const handleClosePanel = (): void => { resetForm(); setPanelOpen(false); };
 
+  const openPanelWithProject = (id: number): void => {
+    resetForm();
+    setProjectId(id);
+    setPanelOpen(true);
+  };
+
   const handleAdd = async (): Promise<void> => {
     if (!name.trim()) { setError("Task name is required."); return; }
     if (!due)         { setError("Due date is required."); return; }
-    const input: NewTaskInput = { name: name.trim(), description: description.trim(), priority, due };
+    const input: NewTaskInput = { name: name.trim(), description: description.trim(), priority, due, project_id: projectId };
     try {
       const created = await addTask(input);
       setTasks(ts => [created, ...ts]);
@@ -325,6 +335,32 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Project */}
+              <div className="panel-field">
+                <label className="panel-label">Project <span className="panel-optional">(optional)</span></label>
+                <div className="proj-selector">
+                  <button
+                    type="button"
+                    className={`proj-selector-opt ${projectId === null ? "selected" : ""}`}
+                    onClick={() => setProjectId(null)}
+                  >
+                    None
+                  </button>
+                  {allProjects.map(p => (
+                    <button
+                      key={p.id}
+                      type="button"
+                      className={`proj-selector-opt ${projectId === p.id ? "selected" : ""}`}
+                      style={projectId === p.id ? { borderColor: p.color, color: p.color, background: p.color + "22" } : {}}
+                      onClick={() => setProjectId(p.id)}
+                    >
+                      <span className="proj-selector-dot" style={{ background: p.color }} />
+                      {p.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {error && <p className="panel-error">{error}</p>}
 
             </div>
@@ -360,11 +396,14 @@ export default function Home() {
                 {task.description && <span className="task-row-desc">{task.description}</span>}
               </div>
               <div className="tags">
-                {task.tags?.map(tag => (
-                  <span key={tag} className="tag" style={{ background: tagColors[tag]?.bg, color: tagColors[tag]?.color }}>
-                    {tag}
-                  </span>
-                ))}
+                {(() => {
+                  const proj = task.project_id ? allProjects.find(p => p.id === task.project_id) : null;
+                  return proj ? (
+                    <span className="tag" style={{ background: proj.color + "22", color: proj.color }}>
+                      {proj.name}
+                    </span>
+                  ) : null;
+                })()}
               </div>
               <div className="priority-cell">
                 <div className="priority-dot" style={{ background: priColor(task.priority as Priority) }} />
@@ -406,11 +445,14 @@ export default function Home() {
                     {task.description && <span className="task-row-desc">{task.description}</span>}
                   </div>
                   <div className="tags">
-                    {task.tags?.map(tag => (
-                      <span key={tag} className="tag" style={{ background: tagColors[tag]?.bg, color: tagColors[tag]?.color }}>
-                        {tag}
-                      </span>
-                    ))}
+                    {(() => {
+                      const proj = task.project_id ? allProjects.find(p => p.id === task.project_id) : null;
+                      return proj ? (
+                        <span className="tag" style={{ background: proj.color + "22", color: proj.color }}>
+                          {proj.name}
+                        </span>
+                      ) : null;
+                    })()}
                   </div>
                   <div className="priority-cell">
                     <div className="priority-dot" style={{ background: "var(--muted2)" }} />
@@ -433,23 +475,32 @@ export default function Home() {
           <span className="section-action" style={{ color: "var(--muted)" }}>⊞</span>
         </div>
 
-        {!collFavs && <div className="project-grid">
-          {favProjects.map(p => (
-            <div key={p.name} className="project-card">
-              <div className="project-card-top" style={{ background: `linear-gradient(135deg, ${p.color})` }}>
-                
-              </div>
-              <div className="project-card-body">
-                <div className="project-name">{p.name}</div>
-                {/* <div className="project-meta">{p.sub}</div> */}
-                <div className="project-progress">
-                  {/* <div className="project-progress-bar" style={{ width: `${p.progress}%`, background: p.color }} /> */}
-                </div>
-              </div>
+        {!collFavs && (
+          favProjects.length === 0 ? (
+            <div style={{ padding: "16px", color: "var(--muted)", fontSize: 13 }}>
+              No favourited projects yet. Star a project to pin it here.
             </div>
-          ))}
-        </div>
-        }
+          ) : (
+            <div className="project-grid">
+              {favProjects.map(p => (
+                <div
+                  key={p.id}
+                  className="project-card fav-project-card"
+                  onClick={() => navigate(`/projects/${p.id}`)}
+                >
+                  <div
+                    className="project-card-top"
+                    style={{ background: `linear-gradient(135deg, ${p.color}, ${p.color}99)`, height: 72 }}
+                  />
+                  <div className="project-card-body">
+                    <div className="project-name" style={{ color: p.color }}>{p.name}</div>
+                    {p.description && <div className="project-meta">{p.description}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        )}
       </div>
 
     </>
