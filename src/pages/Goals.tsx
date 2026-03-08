@@ -71,14 +71,13 @@ function ProgressBar({ pct, color, rounded = false }: { pct: number; color: stri
 }
 
 // Long term card — manual slider
-function LongtermCard({ goal, onDelete, onProgressChange, onNavigate }: {
+function LongtermCard({ goal, onDelete, onNavigate }: {
   goal: Goal;
   onDelete: (id: number) => void;
   onProgressChange: (id: number, p: number) => void;
   onNavigate: (id: number) => void;
 }) {
-  const [dragging, setDragging] = useState(false);
-  const [localPct, setLocalPct] = useState(goal.progress);
+  const localPct = goal.progress;
 
   return (
     <div className="goal-card goal-card-clickable" onClick={() => onNavigate(goal.id)}>

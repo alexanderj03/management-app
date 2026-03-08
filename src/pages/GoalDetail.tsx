@@ -97,13 +97,6 @@ export default function GoalDetail() {
 
   // ── Actions ──────────────────────────────────────────────────────────────────
 
-  const handleProgressCommit = async (p: number) => {
-    if (!goal) return;
-    setGoal(g => g ? { ...g, progress: p } : g);
-    try { await updateGoalProgress(goalId, p); }
-    catch (e) { console.error(e); }
-  };
-
   const commitAmount = async () => {
     const parsed = parseFloat(amountInput);
     if (!isNaN(parsed) && parsed >= 0 && goal) {

@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import type { Capture, Priority, NewTaskInput, NewGoalInput } from "../types";
+import { useState, useEffect, useRef } from "react";
+import type { Capture, Priority, NewGoalInput } from "../types";
 import {
   getCaptures, addCapture, updateCaptureStatus, deleteCapture,
   getProjects, addTask, addGoal,
