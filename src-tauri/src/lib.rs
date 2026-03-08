@@ -44,6 +44,18 @@ pub fn run() {
             commands::add_project,
             commands::delete_project,
             commands::toggle_favourite,
+            commands::get_goals,
+            commands::add_goal,
+            commands::update_goal_progress,
+            commands::update_goal_amount,
+            commands::delete_goal,
+            commands::get_goal_notes,
+            commands::add_goal_note,
+            commands::delete_goal_note,
+            commands::get_milestones,
+            commands::add_milestone,
+            commands::toggle_milestone,
+            commands::delete_milestone,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

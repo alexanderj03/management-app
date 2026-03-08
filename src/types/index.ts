@@ -13,16 +13,19 @@ export interface Task {
   priority:    Priority;
   due:         string;       // "YYYY-MM-DD"
   done:        boolean;
-  tags?:       TagName[];
+  tags?:       TagName[];    // optional
   project_id?: number | null;
 }
+
+// What the Add Task panel collects — id and done assigned automatically
 export type NewTaskInput = Omit<Task, "id" | "done">;
 
+// DB-backed project (replaces the old static Project interface)
 export interface Project {
   id:          number;
   name:        string;
   description: string;
-  color:       string;
+  color:       string;       // hex e.g. "#7c6af7"
   favourite:   boolean;
 }
 
@@ -42,4 +45,39 @@ export interface SidebarProps {
 export interface TopbarProps {
   sidebarOpen:     boolean;
   onToggleSidebar: () => void;
+}
+
+// ─── Goals ────────────────────────────────────────────────────────────────────
+
+export type GoalType = "longterm" | "financial" | "personal";
+
+export interface Goal {
+  id:             number;
+  type:           GoalType;
+  name:           string;
+  description:    string;
+  color:          string;
+  progress:       number;       // 0–100, used by longterm
+  current_amount: number;       // used by financial
+  target_amount:  number;       // used by financial
+  start_date:     string;       // YYYY-MM-DD, used by personal
+  end_date:       string;       // YYYY-MM-DD, used by personal
+  created_at:     string;
+}
+
+export type NewGoalInput = Omit<Goal, "id" | "created_at">;
+
+export interface GoalNote {
+  id:         number;
+  goal_id:    number;
+  content:    string;
+  created_at: string;
+}
+
+export interface Milestone {
+  id:       number;
+  goal_id:  number;
+  text:     string;
+  done:     boolean;
+  position: number;
 }
