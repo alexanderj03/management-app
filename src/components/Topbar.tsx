@@ -1,8 +1,15 @@
 import { useLocation } from "react-router-dom";
-import { navMain } from "../data/taskData";
-import type { TopbarProps } from "../types";
+import type { TopbarProps, NavItem } from "../types";
 
 export default function Topbar({ sidebarOpen, onToggleSidebar }: TopbarProps) {
+
+  const navMain: NavItem[] = [
+    { icon: "🏠", label: "Home",       path: "/home" },
+    { icon: "🔔", label: "Capture",      path: "/inbox" },
+    { icon: "📁", label: "Portfolios", path: "/portfolios" },
+    { icon: "🎯", label: "Goals",      path: "/goals" },
+  ];
+
   const { pathname } = useLocation();
   const current = navMain.find(n => n.path === pathname);
   const pageTitle = current?.label ?? "Home";

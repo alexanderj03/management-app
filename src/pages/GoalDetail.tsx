@@ -38,7 +38,7 @@ const formatDateTime = (dt: string) => {
     " · " + d.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit" });
 };
 
-// ─── Progress bar ─────────────────────────────────────────────────────────────
+// ─── Progress Bar ─────────────────────────────────────────────────────────────
 
 function ProgressBar({ pct, color, rounded = false }: { pct: number; color: string; rounded?: boolean }) {
   const clamped = Math.min(100, Math.max(0, pct));
@@ -80,7 +80,7 @@ export default function GoalDetail() {
   const [saving, setSaving]     = useState(false);
   const textareaRef             = useRef<HTMLTextAreaElement>(null);
 
-  // ── Load ─────────────────────────────────────────────────────────────────────
+  // ─── Load ────────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     Promise.all([getGoals(), getGoalNotes(goalId), getMilestones(goalId)])
@@ -95,7 +95,7 @@ export default function GoalDetail() {
       .finally(() => setLoading(false));
   }, [goalId]);
 
-  // ── Actions ──────────────────────────────────────────────────────────────────
+  // ─── Actions ──────────────────────────────────────────────────────────────────
 
   const commitAmount = async () => {
     const parsed = parseFloat(amountInput);
@@ -168,7 +168,7 @@ export default function GoalDetail() {
     catch (e) { console.error(e); }
   };
 
-  // ── Derived ───────────────────────────────────────────────────────────────────
+  // ─── Render ───────────────────────────────────────────────────────────────────
 
   if (loading) return <div className="page-placeholder"><p>Loading...</p></div>;
   if (!goal)   return (
@@ -199,7 +199,7 @@ export default function GoalDetail() {
   return (
     <div className="gd-page">
 
-      {/* ── HEADER ──────────────────────────────────────────────────────────── */}
+      {/* ── HEADER ─────────────────────────────────────────────────────────── */}
       <div className="gd-header">
         <button className="pd-back" onClick={() => navigate(-1)}>← Back</button>
 
@@ -218,7 +218,7 @@ export default function GoalDetail() {
 
       <div className="gd-body">
 
-        {/* ── PROGRESS PANEL ────────────────────────────────────────────────── */}
+        {/* ── PROGRESS PANEL ──────────────────────────────────────────────── */}
         <div className="gd-panel">
           <h3 className="gd-panel-title">Progress</h3>
 
@@ -226,7 +226,7 @@ export default function GoalDetail() {
             <ProgressBar pct={pct} color={barColor} rounded={isFinancial} />
           </div>
 
-          {/* Long term — milestone checklist */}
+          {/* Long-term: milestone checklist */}
           {isLongterm && (
             <div className="gd-milestones">
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
@@ -273,7 +273,7 @@ export default function GoalDetail() {
             </div>
           )}
 
-          {/* Financial — amounts */}
+          {/* Financial: amounts */}
           {isFinancial && (
             <div className="gd-fin-grid">
               <div className="gd-stat">
@@ -327,7 +327,7 @@ export default function GoalDetail() {
             </div>
           )}
 
-          {/* Personal — dates */}
+          {/* Personal: dates */}
           {isPersonal && (
             <div className="gd-fin-grid">
               <div className="gd-stat">
@@ -354,7 +354,7 @@ export default function GoalDetail() {
           )}
         </div>
 
-        {/* ── NOTES PANEL ───────────────────────────────────────────────────── */}
+        {/* ── NOTES PANEL ─────────────────────────────────────────────────── */}
         <div className="gd-panel">
           <h3 className="gd-panel-title">Notes & Updates</h3>
 

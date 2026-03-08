@@ -39,7 +39,7 @@ const priColor = (p: Priority) =>
 const toDateStr = (y: number, m: number, d: number) =>
   `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
-// ─── ProjectDetail ────────────────────────────────────────────────────────────
+// ─── Project Detail Page ──────────────────────────────────────────────────────
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -65,8 +65,10 @@ export default function ProjectDetail() {
   const [calYear, setCalYear]     = useState(today.getFullYear());
   const [calMonth, setCalMonth]   = useState(today.getMonth());
   const calRef                    = useRef<HTMLDivElement>(null);
+  const calTriggerRef             = useRef<HTMLButtonElement>(null);
+  const [calPos, setCalPos]       = useState<React.CSSProperties>({});
 
-  // ── Load ─────────────────────────────────────────────────────────────────────
+  // ─── Load ────────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     Promise.all([getProjects(), getTasks()])
@@ -79,7 +81,7 @@ export default function ProjectDetail() {
       .finally(() => setLoading(false));
   }, [projectId]);
 
-  // ── Close calendar on outside click ─────────────────────────────────────────
+  // ─── Close Calendar on Outside Click ─────────────────────────────────────────
 
   useEffect(() => {
     if (!calOpen) return;
@@ -91,7 +93,7 @@ export default function ProjectDetail() {
     return () => document.removeEventListener("mousedown", handler);
   }, [calOpen]);
 
-  // ── Calendar helpers ─────────────────────────────────────────────────────────
+  // ─── Calendar Helpers ─────────────────────────────────────────────────────────
 
   const getDaysInMonth     = (y: number, m: number) => new Date(y, m + 1, 0).getDate();
   const getFirstDayOfMonth = (y: number, m: number) => new Date(y, m, 1).getDay();
@@ -114,7 +116,7 @@ export default function ProjectDetail() {
   ];
   while (calCells.length % 7 !== 0) calCells.push(null);
 
-  // ── Actions ──────────────────────────────────────────────────────────────────
+  // ─── Actions ──────────────────────────────────────────────────────────────────
 
   const toggle = async (taskId: number, currentDone: boolean) => {
     setTasks(ts => ts.map(t => t.id === taskId ? { ...t, done: !t.done } : t));
@@ -160,7 +162,7 @@ export default function ProjectDetail() {
   const pending = tasks.filter(t => !t.done);
   const done    = tasks.filter(t =>  t.done);
 
-  // ── Render ───────────────────────────────────────────────────────────────────
+  // ─── Render ───────────────────────────────────────────────────────────────────
 
   if (loading) return <div className="page-placeholder"><p>Loading...</p></div>;
 
@@ -186,7 +188,7 @@ export default function ProjectDetail() {
             </div>
 
             <div className="panel-body">
-              {/* Project badge — always shown, not editable here */}
+              {/* Project badge (read-only) */}
               <div className="panel-field">
                 <label className="panel-label">Project</label>
                 <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
@@ -247,8 +249,21 @@ export default function ProjectDetail() {
                 <label className="panel-label">Due date <span className="panel-required">*</span></label>
                 <div className="cal-wrapper" ref={calRef}>
                   <button
+                    ref={calTriggerRef}
                     className={`cal-trigger ${due ? "has-value" : ""}`}
-                    onClick={() => setCalOpen(o => !o)}
+                    onClick={() => {
+                      if (calTriggerRef.current) {
+                        const r = calTriggerRef.current.getBoundingClientRect();
+                        const spaceBelow = window.innerHeight - r.bottom;
+                        const pos: React.CSSProperties = spaceBelow < 320
+                          ? { bottom: window.innerHeight - r.top + 6 }
+                          : { top: r.bottom + 6 };
+                        if (window.innerWidth - r.left < 280) pos.right = window.innerWidth - r.right;
+                        else pos.left = r.left;
+                        setCalPos(pos);
+                      }
+                      setCalOpen(o => !o);
+                    }}
                     type="button"
                   >
                     <span className="cal-trigger-icon">📅</span>
@@ -259,7 +274,7 @@ export default function ProjectDetail() {
                   </button>
 
                   {calOpen && (
-                    <div className="cal-popover">
+                    <div className="cal-popover" style={calPos}>
                       <div className="cal-nav">
                         <button className="cal-nav-btn" onClick={prevMonth}>‹</button>
                         <span className="cal-month-label">{MONTH_NAMES[calMonth]} {calYear}</span>

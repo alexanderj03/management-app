@@ -1,0 +1,251 @@
+/* ─── TASK TABLE ─────────────────────────────────────────────────────────── */
+
+.task-table {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.task-table-header {
+  display: grid;
+  grid-template-columns: 36px 1fr 160px 100px 80px 32px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--muted2);
+  font-family: 'DM Mono', monospace;
+}
+
+/* ─── TASK ROWS ──────────────────────────────────────────────────────────── */
+
+.task-row {
+  display: grid;
+  grid-template-columns: 36px 1fr 160px 100px 80px 32px;
+  align-items: center;
+  padding: 0 16px;
+  min-height: 46px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+  cursor: pointer;
+}
+
+.task-row:last-child {
+  border-bottom: none;
+}
+
+.task-row:hover {
+  background: var(--surface2);
+}
+
+.task-row.done {
+  opacity: 0.4;
+}
+
+.task-row.done .task-row-name {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.task-row-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 0 8px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-row-desc {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── CHECK CIRCLE ───────────────────────────────────────────────────────── */
+
+.check-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid var(--muted2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 10px;
+  color: transparent;
+}
+
+.check-circle:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.check-circle.checked {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+
+/* ─── TAGS ───────────────────────────────────────────────────────────────── */
+
+.tags {
+  display: flex;
+  gap: 5px;
+  overflow: hidden;
+}
+
+.tag {
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+/* ─── PRIORITY ───────────────────────────────────────────────────────────── */
+
+.priority-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.priority-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.priority-label {
+  font-size: 12.5px;
+  color: var(--muted);
+  text-transform: capitalize;
+}
+
+/* ─── DUE DATE ───────────────────────────────────────────────────────────── */
+
+.due-date {
+  font-size: 12.5px;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+}
+
+.due-date.today {
+  color: var(--orange);
+  font-weight: 500;
+}
+
+.due-date.overdue {
+  color: var(--pink);
+  font-weight: 500;
+}
+
+/* ─── ADD TASK ROW ───────────────────────────────────────────────────────── */
+
+.add-task-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.1s;
+  border-top: 1px solid var(--border);
+}
+
+.add-task-row:hover {
+  background: var(--surface2);
+  color: var(--text);
+}
+
+.add-task-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  flex: 1;
+}
+
+.add-task-input::placeholder {
+  color: var(--muted);
+}
+
+/* ─── TASK DELETE BUTTON ─────────────────────────────────────────────────── */
+
+.task-delete-btn {
+  opacity: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s, background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.task-row:hover .task-delete-btn {
+  opacity: 1;
+}
+
+.task-delete-btn:hover {
+  background: rgba(247, 106, 138, 0.15);
+  color: var(--pink);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .task-table-header,
+  .task-row {
+    grid-template-columns: 36px 1fr 100px 80px 32px;
+  }
+
+  .task-table-header > div:nth-child(3),
+  .task-row .tags {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .task-table-header,
+  .task-row {
+    grid-template-columns: 36px 1fr 80px 32px;
+  }
+
+  .task-table-header > div:nth-child(3),
+  .task-row .tags,
+  .task-table-header > div:nth-child(4),
+  .task-row .priority-cell {
+    display: none;
+  }
+
+  .due-date {
+    font-size: 12px;
+  }
+}

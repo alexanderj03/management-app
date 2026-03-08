@@ -1,10 +1,4 @@
-export type TagName = "Dev" | "Design" | "Research" | "Marketing" | "Personal";
 export type Priority = "high" | "medium" | "low";
-
-export interface TagColor {
-  bg: string;
-  color: string;
-}
 
 export interface Task {
   id:          number;
@@ -13,11 +7,10 @@ export interface Task {
   priority:    Priority;
   due:         string;       // "YYYY-MM-DD"
   done:        boolean;
-  tags?:       TagName[];    // optional
+  tags?:       string[];
   project_id?: number | null;
 }
 
-// What the Add Task panel collects — id and done assigned automatically
 export type NewTaskInput = Omit<Task, "id" | "done">;
 
 // DB-backed project (replaces the old static Project interface)
@@ -57,11 +50,11 @@ export interface Goal {
   name:           string;
   description:    string;
   color:          string;
-  progress:       number;       // 0–100, used by longterm
-  current_amount: number;       // used by financial
-  target_amount:  number;       // used by financial
-  start_date:     string;       // YYYY-MM-DD, used by personal
-  end_date:       string;       // YYYY-MM-DD, used by personal
+  progress:       number;
+  current_amount: number;
+  target_amount:  number;
+  start_date:     string;
+  end_date:       string;
   created_at:     string;
 }
 

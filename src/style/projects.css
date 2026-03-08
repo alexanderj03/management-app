@@ -1,0 +1,407 @@
+/* ─── PROJECT CARDS (DASHBOARD) ──────────────────────────────────────────── */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 14px;
+}
+
+.project-card {
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 1px solid var(--border);
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.project-card-top {
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.project-card-body {
+  background: var(--surface);
+  padding: 10px 12px 12px;
+}
+
+.project-name {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-meta {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+}
+
+.project-progress {
+  margin-top: 8px;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.project-progress-bar {
+  height: 100%;
+  border-radius: 2px;
+}
+
+/* ─── PROJECTS PAGE ──────────────────────────────────────────────────────── */
+
+.projects-page {
+  padding: 0;
+}
+
+.projects-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.projects-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+
+.projects-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.projects-add-btn {
+  padding: 9px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 2px 12px rgba(124, 106, 247, 0.3);
+  transition: filter 0.12s;
+  flex-shrink: 0;
+}
+
+.projects-add-btn:hover {
+  filter: brightness(1.1);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+/* ─── PROJECT CARD (DB) ──────────────────────────────────────────────────── */
+
+.project-card-db {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.15s, transform 0.15s;
+  cursor: default;
+}
+
+.project-card-db:hover {
+  border-color: var(--muted2);
+  transform: translateY(-2px);
+}
+
+.project-card-db-bar {
+  height: 5px;
+}
+
+.project-card-db-body {
+  padding: 14px 16px 16px;
+}
+
+.project-card-db-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.project-card-db-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.project-card-db-name {
+  font-size: 14px;
+  font-weight: 600;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-card-delete {
+  opacity: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.12s, background 0.12s, color 0.12s;
+}
+
+.project-card-db:hover .project-card-delete {
+  opacity: 1;
+}
+
+.project-card-delete:hover {
+  background: rgba(247, 106, 138, 0.15);
+  color: var(--pink);
+}
+
+.project-card-db-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.project-card-db-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+}
+
+/* ─── EMPTY STATE ────────────────────────────────────────────────────────── */
+
+.projects-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.projects-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.projects-empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.projects-empty-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ─── COLOUR SWATCHES ────────────────────────────────────────────────────── */
+
+.color-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.1s, border-color 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-swatch:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch.selected {
+  border-color: white;
+  transform: scale(1.1);
+}
+
+.color-swatch-custom {
+  border: 2px dashed var(--border);
+  background: var(--surface2) !important;
+}
+
+.color-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.color-preview-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── FAVOURITE BUTTON ───────────────────────────────────────────────────── */
+
+.project-card-fav {
+  opacity: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.12s, color 0.12s, background 0.12s;
+}
+
+.project-card-db:hover .project-card-fav {
+  opacity: 1;
+}
+
+.project-card-fav:hover {
+  background: rgba(245, 166, 35, 0.15);
+  color: var(--orange);
+}
+
+.project-card-fav.active {
+  opacity: 1;
+  color: var(--orange);
+}
+
+.project-card-fav.active:hover {
+  background: rgba(245, 166, 35, 0.15);
+}
+
+/* ─── FAVOURITE PROJECT CARD ─────────────────────────────────────────────── */
+
+.fav-project-card {
+  cursor: pointer;
+}
+
+.fav-project-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--muted2);
+}
+
+.fav-card-hint {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 8px;
+  transition: color 0.12s;
+}
+
+.fav-project-card:hover .fav-card-hint {
+  color: var(--accent);
+}
+
+/* ─── PROJECT DETAIL PAGE ────────────────────────────────────────────────── */
+
+.pd-header {
+  margin-bottom: 24px;
+}
+
+.pd-back {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0 0 12px;
+  font-family: 'DM Sans', sans-serif;
+  transition: color 0.1s;
+}
+
+.pd-back:hover {
+  color: var(--text);
+}
+
+.pd-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.pd-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pd-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.pd-desc {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.pd-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--muted2);
+}
+
+.pd-task-row,
+.pd-task-row ~ .task-table-header {
+  grid-template-columns: 36px 1fr 100px 80px 32px !important;
+}
+
+@media (max-width: 640px) {
+  .pd-task-row {
+    grid-template-columns: 36px 1fr 80px 32px !important;
+  }
+
+  .pd-task-row .priority-cell {
+    display: none;
+  }
+}

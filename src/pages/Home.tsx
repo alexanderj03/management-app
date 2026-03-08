@@ -39,7 +39,7 @@ const priColor = (p: Priority): string =>
 const toDateStr = (y: number, m: number, d: number): string =>
   `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
-// ─── Home ─────────────────────────────────────────────────────────────────────
+// ─── Home Page ────────────────────────────────────────────────────────────────
 
 export default function Home() {
   const [tasks, setTasks]         = useState<Task[]>([]);
@@ -69,7 +69,7 @@ export default function Home() {
   const calTriggerRef             = useRef<HTMLButtonElement | null>(null);
   const [calPos, setCalPos]       = useState<React.CSSProperties>({});
 
-  // ── Load on mount ───────────────────────────────────────────────────────────
+  // ─── Load on Mount ────────────────────────────────────────────────────────────
 
   useEffect(() => {
     Promise.all([
@@ -85,7 +85,7 @@ export default function Home() {
     .finally(() => setLoading(false));
   }, []);
 
-  // ── Dev reset ───────────────────────────────────────────────────────────────
+  // ─── Dev Reset ────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (!import.meta.env.DEV) return;
@@ -100,7 +100,7 @@ export default function Home() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  // ── Close calendar when clicking outside ────────────────────────────────────
+  // ─── Close Calendar on Outside Click ─────────────────────────────────────────
 
   useEffect(() => {
     if (!calOpen) return;
@@ -113,7 +113,7 @@ export default function Home() {
     return () => document.removeEventListener("mousedown", handler);
   }, [calOpen]);
 
-  // ── Calendar helpers ────────────────────────────────────────────────────────
+  // ─── Calendar Helpers ─────────────────────────────────────────────────────────
 
   const getDaysInMonth = (y: number, m: number) => new Date(y, m + 1, 0).getDate();
   const getFirstDayOfMonth = (y: number, m: number) => new Date(y, m, 1).getDay();
@@ -146,7 +146,7 @@ export default function Home() {
   // Pad to full weeks
   while (calCells.length % 7 !== 0) calCells.push(null);
 
-  // ── Actions ─────────────────────────────────────────────────────────────────
+  // ─── Actions ──────────────────────────────────────────────────────────────────
 
   const toggle = async (id: number, currentDone: boolean): Promise<void> => {
     setTasks(ts => ts.map(t => t.id === id ? { ...t, done: !t.done } : t));
@@ -180,18 +180,18 @@ export default function Home() {
   };
 
   const handleDelete = async (id: number): Promise<void> => {
-    setTasks(ts => ts.filter(t => t.id !== id)); // optimistic remove
+    setTasks(ts => ts.filter(t => t.id !== id));
     try { await deleteTask(id); }
     catch (e) {
       console.error(e);
-      getTasks().then(setTasks); // restore on failure
+      getTasks().then(setTasks);
     }
   };
 
   const pending = tasks.filter(t => !t.done);
   const done    = tasks.filter(t =>  t.done);
 
-  // ── Render ──────────────────────────────────────────────────────────────────
+  // ─── Render ───────────────────────────────────────────────────────────────────
 
   if (loading) {
     return <div className="page-placeholder"><p>Loading tasks...</p></div>;
@@ -200,7 +200,7 @@ export default function Home() {
   return (
     <>
 
-      {/* ── ADD TASK PANEL ────────────────────────────────────────────────── */}
+      {/* ── ADD TASK PANEL ──────────────────────────────────────────────────── */}
       {panelOpen && (
         <>
           <div className="panel-scrim" onClick={handleClosePanel} />
@@ -256,7 +256,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Due date — custom popover calendar */}
+              {/* Due date */}
               <div className="panel-field">
                 <label className="panel-label">Due date <span className="panel-required">*</span></label>
 
@@ -383,7 +383,7 @@ export default function Home() {
         </>
       )}
 
-      {/* ── TASKS DUE SOON ────────────────────────────────────────────────── */}
+      {/* ── TASKS DUE SOON ──────────────────────────────────────────────────── */}
       <div>
         <div className="section-header" onClick={() => setCollPending(c => !c)}>
           <span className={`section-toggle ${collPending ? "collapsed" : ""}`}>▼</span>
@@ -429,7 +429,7 @@ export default function Home() {
         </div>}
       </div>
 
-      {/* ── COMPLETED ─────────────────────────────────────────────────────── */}
+      {/* ── COMPLETED ───────────────────────────────────────────────────────── */}
       {done.length > 0 && (
         <div>
           <div className="section-header" onClick={() => setCollDone(c => !c)}>
@@ -476,7 +476,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* ── FAVORITES / PROJECTS ──────────────────────────────────────────── */}
+      {/* ── FAVORITES ───────────────────────────────────────────────────────── */}
       <div>
         <div className="section-header" onClick={() => setCollFavs(c => !c)}>
           <span className={`section-toggle ${collFavs ? "collapsed" : ""}`}>▼</span>

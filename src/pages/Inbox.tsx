@@ -24,9 +24,7 @@ const priorityColor: Record<Priority, string> = {
   high: "var(--pink)", medium: "var(--orange)", low: "var(--green)",
 };
 
-// ─── Convert-to-Task inline form ──────────────────────────────────────────────
-
-// ─── Shared calendar helpers ──────────────────────────────────────────────────
+// ─── Calendar Helpers ─────────────────────────────────────────────────────────
 
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const CAL_DAYS    = ["Su","Mo","Tu","We","Th","Fr","Sa"];
@@ -80,6 +78,8 @@ function formatDue(d: string) {
   const [y, m, day] = d.split("-");
   return `${day}/${m}/${y}`;
 }
+
+// ─── Convert-to-Task Form ─────────────────────────────────────────────────────
 
 function ConvertTaskForm({ capture, projects, onDone, onCancel }: {
   capture: Capture;
@@ -215,7 +215,7 @@ function ConvertTaskForm({ capture, projects, onDone, onCancel }: {
   );
 }
 
-// ─── Convert-to-Goal inline form ─────────────────────────────────────────────
+// ─── Convert-to-Goal Form ─────────────────────────────────────────────────────
 
 function ConvertGoalForm({ capture, onDone, onCancel }: {
   capture: Capture;
@@ -409,7 +409,7 @@ function ConvertGoalForm({ capture, onDone, onCancel }: {
   );
 }
 
-// ─── Single capture item ──────────────────────────────────────────────────────
+// ─── Capture Item ─────────────────────────────────────────────────────────────
 
 function CaptureItem({ capture, projects, onStatusChange, onDelete }: {
   capture: Capture;
@@ -473,7 +473,7 @@ function CaptureItem({ capture, projects, onStatusChange, onDelete }: {
   );
 }
 
-// ─── Main Inbox Page ──────────────────────────────────────────────────────────
+// ─── Inbox Page ───────────────────────────────────────────────────────────────
 
 export default function Inbox() {
   const [captures, setCaptures]   = useState<Capture[]>([]);
@@ -521,7 +521,7 @@ export default function Inbox() {
   return (
     <div className="inbox-page">
 
-      {/* ── HEADER ──────────────────────────────────────────────────────────── */}
+      {/* ── HEADER ─────────────────────────────────────────────────────────── */}
       <div className="projects-header">
         <div>
           <h2 className="projects-title">Inbox</h2>

@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+/* ─── RESET ──────────────────────────────────────────────────────────────── */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ─── DESIGN TOKENS ──────────────────────────────────────────────────────── */
+
+:root {
+  --bg:      #111113;
+  --sidebar: #1a1a1f;
+  --surface: #1e1e24;
+  --surface2: #25252d;
+  --border:  #2a2a33;
+  --text:    #e2e2ea;
+  --muted:   #6b6b7e;
+  --muted2:  #4a4a58;
+  --accent:  #7c6af7;
+  --green:   #37c98a;
+  --orange:  #f5a623;
+  --pink:    #f76a8a;
+  --blue:    #5b9cf6;
+}
+
+/* ─── BASE ───────────────────────────────────────────────────────────────── */
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Remove native number input spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

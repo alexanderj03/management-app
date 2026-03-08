@@ -1,10 +1,17 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import type { SidebarProps, Project } from "../types";
-import { navMain } from "../data/taskData";
+import type { SidebarProps, Project, NavItem } from "../types";
 import { getProjects } from "../lib/db";
 import { useState, useEffect } from "react";
 
 export default function Sidebar({ sidebarOpen, onCloseSidebar }: SidebarProps) {
+
+  const navMain: NavItem[] = [
+    { icon: "🏠", label: "Home",       path: "/home" },
+    { icon: "🔔", label: "Capture",      path: "/inbox" },
+    { icon: "📁", label: "Portfolios", path: "/portfolios" },
+    { icon: "🎯", label: "Goals",      path: "/goals" },
+  ];
+
   const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
 

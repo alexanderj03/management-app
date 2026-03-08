@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import type { Project, NewProjectInput } from "../types";
 import { getProjects, addProject, deleteProject, toggleFavourite } from "../lib/db";
+import { useNavigate } from "react-router-dom";
+
 
 const PRESET_COLORS = [
   "#7c6af7", "#a78bfa", "#f76a8a", "#fb923c",
@@ -17,6 +19,8 @@ const darken = (hex: string) => {
 };
 
 export default function Projects() {
+  const navigate = useNavigate();
+
   const [projects, setProjects]   = useState<Project[]>([]);
   const [loading, setLoading]     = useState<boolean>(true);
   const [panelOpen, setPanelOpen] = useState<boolean>(false);
@@ -205,7 +209,7 @@ export default function Projects() {
       ) : (
         <div className="projects-grid">
           {projects.map(project => (
-            <div key={project.id} className="project-card-db">
+            <div key={project.id} className="project-card-db" onClick={() => navigate(`/projects/${project.id}`)}>
 
               {/* Coloured top bar */}
               <div
@@ -224,13 +228,13 @@ export default function Projects() {
                   </span>
                   <button
                     className={`project-card-fav ${project.favourite ? "active" : ""}`}
-                    onClick={() => handleFavourite(project.id, project.favourite)}
+                    onClick={e => { e.stopPropagation(); handleFavourite(project.id, project.favourite); }}
                     aria-label={project.favourite ? "Remove from favourites" : "Add to favourites"}
                     title={project.favourite ? "Remove from home" : "Pin to home"}
                   >{project.favourite ? "★" : "☆"}</button>
                   <button
                     className="project-card-delete"
-                    onClick={() => handleDelete(project.id)}
+                    onClick={e => { e.stopPropagation(); handleDelete(project.id); }}
                     aria-label="Delete project"
                   >✕</button>
                 </div>

@@ -50,7 +50,7 @@ const formatDate = (d: string): string => {
   return `${day}/${m}/${y}`;
 };
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+// ─── Sub-Components ───────────────────────────────────────────────────────────
 
 // Animated progress bar
 function ProgressBar({ pct, color, rounded = false }: { pct: number; color: string; rounded?: boolean }) {
@@ -70,7 +70,7 @@ function ProgressBar({ pct, color, rounded = false }: { pct: number; color: stri
   );
 }
 
-// Long term card — manual slider
+// ─── Long-Term Card ───────────────────────────────────────────────────────────
 function LongtermCard({ goal, onDelete, onNavigate }: {
   goal: Goal;
   onDelete: (id: number) => void;
@@ -99,7 +99,7 @@ function LongtermCard({ goal, onDelete, onNavigate }: {
   );
 }
 
-// Financial card — current vs target with rounded fill bar
+// ─── Financial Card ───────────────────────────────────────────────────────────
 function FinancialCard({ goal, onDelete, onAmountChange, onNavigate }: {
   goal: Goal;
   onDelete: (id: number) => void;
@@ -179,7 +179,7 @@ function FinancialCard({ goal, onDelete, onAmountChange, onNavigate }: {
   );
 }
 
-// Personal card — date-driven fill
+// ─── Personal Card ────────────────────────────────────────────────────────────
 function PersonalCard({ goal, onDelete, onNavigate }: {
   goal: Goal;
   onDelete: (id: number) => void;
@@ -222,7 +222,7 @@ function PersonalCard({ goal, onDelete, onNavigate }: {
   );
 }
 
-// ─── Main Goals Page ──────────────────────────────────────────────────────────
+// ─── Goals Page ───────────────────────────────────────────────────────────────
 
 export default function Goals() {
   const navigate = useNavigate();
@@ -269,7 +269,7 @@ export default function Goals() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // ── Calendar helpers ────────────────────────────────────────────────────────
+  // ─── Calendar Helpers ─────────────────────────────────────────────────────────
 
   const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
   const DAY_NAMES   = ["Su","Mo","Tu","We","Th","Fr","Sa"];
@@ -336,7 +336,7 @@ export default function Goals() {
     </div>
   );
 
-  // ── Actions ──────────────────────────────────────────────────────────────────
+  // ─── Actions ──────────────────────────────────────────────────────────────────
 
   const resetForm = () => {
     setName(""); setDesc(""); setColor(PRESET_COLORS[0]);
@@ -413,7 +413,7 @@ export default function Goals() {
   return (
     <div className="goals-page">
 
-      {/* ── PANEL ─────────────────────────────────────────────────────────── */}
+      {/* ── PANEL ───────────────────────────────────────────────────────────── */}
       {panelOpen && (
         <>
           <div className="panel-scrim" onClick={handleClose} />
@@ -487,7 +487,7 @@ export default function Goals() {
                 </div>
               </div>
 
-              {/* ── Type-specific fields ── */}
+              {/* Type-specific fields */}
 
               {type === "longterm" && (
                 <div className="panel-field">
@@ -610,7 +610,7 @@ export default function Goals() {
         </>
       )}
 
-      {/* ── PAGE HEADER ───────────────────────────────────────────────────── */}
+      {/* ── PAGE HEADER ─────────────────────────────────────────────────────── */}
       <div className="projects-header">
         <div>
           <h2 className="projects-title">Goals</h2>
@@ -621,7 +621,7 @@ export default function Goals() {
         </button>
       </div>
 
-      {/* ── SECTIONS ──────────────────────────────────────────────────────── */}
+      {/* ── SECTIONS ────────────────────────────────────────────────────────── */}
       {SECTIONS.map(sectionType => {
         const meta        = TYPE_META[sectionType];
         const sectionGoals = goals.filter(g => g.type === sectionType);

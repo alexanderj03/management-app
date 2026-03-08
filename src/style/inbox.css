@@ -1,0 +1,299 @@
+/* ─── INBOX PAGE ─────────────────────────────────────────────────────────── */
+
+.inbox-page {
+  max-width: 680px;
+}
+
+/* ─── COMPOSE ────────────────────────────────────────────────────────────── */
+
+.inbox-compose {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.12s;
+  margin-bottom: 16px;
+}
+
+.inbox-compose:focus-within {
+  border-color: var(--accent);
+}
+
+.inbox-compose-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 10px;
+  border-top: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.inbox-input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  padding: 14px 16px;
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inbox-input::placeholder {
+  color: var(--muted);
+}
+
+.inbox-capture-btn {
+  padding: 7px 20px;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: filter 0.12s;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(124, 106, 247, 0.3);
+}
+
+.inbox-capture-btn:hover {
+  filter: brightness(1.1);
+}
+
+.inbox-capture-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: none;
+}
+
+.inbox-hint {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+/* ─── EMPTY STATE ────────────────────────────────────────────────────────── */
+
+.inbox-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.inbox-empty-icon {
+  font-size: 44px;
+  margin-bottom: 14px;
+}
+
+.inbox-empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.inbox-empty-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ─── CAPTURE LIST ───────────────────────────────────────────────────────── */
+
+.capture-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.capture-list.processed {
+  margin-top: 10px;
+  opacity: 0.6;
+}
+
+.capture-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  transition: border-color 0.12s;
+}
+
+.capture-item:hover {
+  border-color: var(--muted2);
+}
+
+.capture-item.processed {
+  background: transparent;
+}
+
+.capture-item-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.capture-item-dot {
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.capture-item-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.capture-item-time {
+  font-size: 11.5px;
+  color: var(--muted);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.capture-item-actions {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+/* ─── CAPTURE ACTION BUTTONS ─────────────────────────────────────────────── */
+
+.capture-action-btn {
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted2);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.12s;
+}
+
+.capture-action-btn:hover {
+  color: var(--text);
+  border-color: var(--muted2);
+}
+
+.capture-action-btn.task:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(124, 106, 247, 0.1);
+}
+
+.capture-action-btn.goal:hover {
+  border-color: var(--green);
+  color: var(--green);
+  background: rgba(55, 201, 138, 0.1);
+}
+
+.capture-action-btn.keep:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: rgba(245, 166, 35, 0.1);
+}
+
+.capture-action-btn.dismiss:hover {
+  border-color: var(--pink);
+  color: var(--pink);
+  background: rgba(247, 106, 138, 0.1);
+}
+
+/* ─── STATUS BADGE ───────────────────────────────────────────────────────── */
+
+.capture-status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.capture-status-badge.converted {
+  background: rgba(55, 201, 138, 0.15);
+  color: var(--green);
+}
+
+.capture-status-badge.dismissed {
+  background: rgba(245, 166, 35, 0.12);
+  color: var(--orange);
+}
+
+/* ─── CONVERT FORMS ──────────────────────────────────────────────────────── */
+
+.capture-convert-form {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ccf-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ccf-sublabel {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.ccf-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ccf-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.ccf-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.ccf-pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+}
+
+.ccf-pill:hover {
+  border-color: var(--muted2);
+  color: var(--text);
+}
+
+.ccf-pill.selected {
+  font-weight: 600;
+}
