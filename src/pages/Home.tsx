@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Task, Priority, NewTaskInput, Project } from "../types";
+import { tagColors } from "../data/taskData";
 import { getTasks, addTask, toggleTask, deleteTask, resetDatabase, getProjects } from "../lib/db";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -66,6 +67,8 @@ export default function Home() {
   const [calYear, setCalYear]     = useState<number>(today.getFullYear());
   const [calMonth, setCalMonth]   = useState<number>(today.getMonth());
   const calRef                    = useRef<HTMLDivElement>(null);
+  const calTriggerRef             = useRef<HTMLButtonElement | null>(null);
+  const [calPos, setCalPos]       = useState<React.CSSProperties>({});
 
   // ── Load on mount ───────────────────────────────────────────────────────────
 
@@ -267,8 +270,21 @@ export default function Home() {
                 <div className="cal-wrapper" ref={calRef}>
                   {/* Trigger button */}
                   <button
+                    ref={calTriggerRef}
                     className={`cal-trigger ${due ? "has-value" : ""}`}
-                    onClick={() => setCalOpen(o => !o)}
+                    onClick={() => {
+                      if (calTriggerRef.current) {
+                        const r = calTriggerRef.current.getBoundingClientRect();
+                        const spaceBelow = window.innerHeight - r.bottom;
+                        const pos: React.CSSProperties = spaceBelow < 320
+                          ? { bottom: window.innerHeight - r.top + 6 }
+                          : { top: r.bottom + 6 };
+                        if (window.innerWidth - r.left < 280) pos.right = window.innerWidth - r.right;
+                        else pos.left = r.left;
+                        setCalPos(pos);
+                      }
+                      setCalOpen(o => !o);
+                    }}
                     type="button"
                   >
                     <span className="cal-trigger-icon">📅</span>
@@ -283,7 +299,7 @@ export default function Home() {
 
                   {/* Popover */}
                   {calOpen && (
-                    <div className="cal-popover">
+                    <div className="cal-popover" style={calPos}>
 
                       {/* Month navigation */}
                       <div className="cal-nav">

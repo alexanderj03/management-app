@@ -77,6 +77,7 @@ function LongtermCard({ goal, onDelete, onProgressChange, onNavigate }: {
   onProgressChange: (id: number, p: number) => void;
   onNavigate: (id: number) => void;
 }) {
+  const [dragging, setDragging] = useState(false);
   const [localPct, setLocalPct] = useState(goal.progress);
 
   return (
@@ -286,13 +287,31 @@ export default function Goals() {
     return cells;
   };
 
+  const [startCalPos, setStartCalPos] = useState<React.CSSProperties>({});
+  const [endCalPos,   setEndCalPos]   = useState<React.CSSProperties>({});
+  const startTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const endTriggerRef   = useRef<HTMLButtonElement | null>(null);
+
+  const calcPos = (trigRef: React.RefObject<HTMLButtonElement | null>): React.CSSProperties => {
+    if (!trigRef.current) return {};
+    const r = trigRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - r.bottom;
+    const pos: React.CSSProperties = spaceBelow < 320
+      ? { bottom: window.innerHeight - r.top + 6 }
+      : { top: r.bottom + 6 };
+    if (window.innerWidth - r.left < 280) pos.right = window.innerWidth - r.right;
+    else pos.left = r.left;
+    return pos;
+  };
+
   const CalendarPopover = ({
-    year, month, selected, onPrevMonth, onNextMonth, onPick,
+    year, month, selected, onPrevMonth, onNextMonth, onPick, style,
   }: {
     year: number; month: number; selected: string;
     onPrevMonth: () => void; onNextMonth: () => void; onPick: (d: string) => void;
+    style?: React.CSSProperties;
   }) => (
-    <div className="cal-popover">
+    <div className="cal-popover" style={style}>
       <div className="cal-nav">
         <button className="cal-nav-btn" onClick={onPrevMonth} type="button">‹</button>
         <span className="cal-month-label">{MONTH_NAMES[month]} {year}</span>
@@ -481,11 +500,12 @@ export default function Goals() {
                         <input
                           className="panel-input"
                           style={{ flex: 1 }}
-                          placeholder={"Add milestone"}
+                          placeholder={`e.g. ${["Get first client", "Launch MVP", "Hit $10k revenue", "Build a team"][i] ?? "Add milestone"}`}
                           value={val}
                           onChange={e => {
                             const next = [...milestoneInputs];
                             next[i] = e.target.value;
+                            // auto-add new row when typing in last field
                             if (i === milestoneInputs.length - 1 && e.target.value) next.push("");
                             setMilestoneInputs(next);
                           }}
@@ -540,8 +560,8 @@ export default function Goals() {
                   <div className="panel-field">
                     <label className="panel-label">Start date <span className="panel-required">*</span></label>
                     <div className="cal-wrapper" ref={startCalRef}>
-                      <button type="button" className={`cal-trigger ${startDate ? "has-value" : ""}`}
-                        onClick={() => { setStartCalOpen(o => !o); setEndCalOpen(false); }}>
+                      <button ref={startTriggerRef} type="button" className={`cal-trigger ${startDate ? "has-value" : ""}`}
+                        onClick={() => { setStartCalPos(calcPos(startTriggerRef)); setStartCalOpen(o => !o); setEndCalOpen(false); }}>
                         <span className="cal-trigger-icon">📅</span>
                         <span>{startDate ? formatDate(startDate) : "Pick a date"}</span>
                         {startDate && <span className="cal-clear" onClick={e => { e.stopPropagation(); setStartDate(""); }}>✕</span>}
@@ -549,6 +569,7 @@ export default function Goals() {
                       {startCalOpen && (
                         <CalendarPopover
                           year={startCalYear} month={startCalMonth} selected={startDate}
+                          style={startCalPos}
                           onPrevMonth={() => startCalMonth===0 ? (setStartCalMonth(11),setStartCalYear(y=>y-1)) : setStartCalMonth(m=>m-1)}
                           onNextMonth={() => startCalMonth===11 ? (setStartCalMonth(0),setStartCalYear(y=>y+1)) : setStartCalMonth(m=>m+1)}
                           onPick={d => { setStartDate(d); setStartCalOpen(false); setError(""); }}
@@ -559,8 +580,8 @@ export default function Goals() {
                   <div className="panel-field">
                     <label className="panel-label">End date <span className="panel-required">*</span></label>
                     <div className="cal-wrapper" ref={endCalRef}>
-                      <button type="button" className={`cal-trigger ${endDate ? "has-value" : ""}`}
-                        onClick={() => { setEndCalOpen(o => !o); setStartCalOpen(false); }}>
+                      <button ref={endTriggerRef} type="button" className={`cal-trigger ${endDate ? "has-value" : ""}`}
+                        onClick={() => { setEndCalPos(calcPos(endTriggerRef)); setEndCalOpen(o => !o); setStartCalOpen(false); }}>
                         <span className="cal-trigger-icon">📅</span>
                         <span>{endDate ? formatDate(endDate) : "Pick a date"}</span>
                         {endDate && <span className="cal-clear" onClick={e => { e.stopPropagation(); setEndDate(""); }}>✕</span>}
@@ -568,6 +589,7 @@ export default function Goals() {
                       {endCalOpen && (
                         <CalendarPopover
                           year={endCalYear} month={endCalMonth} selected={endDate}
+                          style={endCalPos}
                           onPrevMonth={() => endCalMonth===0 ? (setEndCalMonth(11),setEndCalYear(y=>y-1)) : setEndCalMonth(m=>m-1)}
                           onNextMonth={() => endCalMonth===11 ? (setEndCalMonth(0),setEndCalYear(y=>y+1)) : setEndCalMonth(m=>m+1)}
                           onPick={d => { setEndDate(d); setEndCalOpen(false); setError(""); }}

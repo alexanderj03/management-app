@@ -137,12 +137,13 @@ pub async fn delete_task(
 pub async fn reset_database(pool: State<'_, Pool<Sqlite>>) -> Result<(), String> {
     #[cfg(debug_assertions)]
     {
+        sqlx::query("DELETE FROM captures").execute(pool.inner()).await.map_err(|e| e.to_string())?;
         sqlx::query("DELETE FROM goal_notes").execute(pool.inner()).await.map_err(|e| e.to_string())?;
         sqlx::query("DELETE FROM goal_milestones").execute(pool.inner()).await.map_err(|e| e.to_string())?;
         sqlx::query("DELETE FROM goals").execute(pool.inner()).await.map_err(|e| e.to_string())?;
         sqlx::query("DELETE FROM tasks").execute(pool.inner()).await.map_err(|e| e.to_string())?;
         sqlx::query("DELETE FROM projects").execute(pool.inner()).await.map_err(|e| e.to_string())?;
-        sqlx::query("DELETE FROM sqlite_sequence WHERE name IN ('tasks', 'projects', 'goals', 'goal_notes', 'goal_milestones')")
+        sqlx::query("DELETE FROM sqlite_sequence WHERE name IN ('tasks', 'projects', 'goals', 'goal_notes', 'goal_milestones', 'captures')")
             .execute(pool.inner()).await.map_err(|e| e.to_string())?;
         return Ok(());
     }
@@ -534,6 +535,88 @@ pub async fn delete_milestone(
     id:   i64,
 ) -> Result<(), String> {
     sqlx::query("DELETE FROM goal_milestones WHERE id = ?")
+        .bind(id).execute(pool.inner()).await.map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+// ─── Capture commands ─────────────────────────────────────────────────────────
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct Capture {
+    pub id:         i64,
+    pub text:       String,
+    pub status:     String,   // "inbox" | "converted" | "dismissed"
+    pub created_at: String,
+}
+
+#[tauri::command]
+pub async fn get_captures(pool: State<'_, Pool<Sqlite>>) -> Result<Vec<Capture>, String> {
+    let rows = sqlx::query(
+        "SELECT id, text, status, created_at FROM captures ORDER BY id DESC"
+    )
+    .fetch_all(pool.inner())
+    .await
+    .map_err(|e| e.to_string())?;
+
+    use sqlx::Row;
+    Ok(rows.iter().map(|r| Capture {
+        id:         r.get("id"),
+        text:       r.get("text"),
+        status:     r.get("status"),
+        created_at: r.get("created_at"),
+    }).collect())
+}
+
+#[tauri::command]
+pub async fn add_capture(
+    pool: State<'_, Pool<Sqlite>>,
+    text: String,
+) -> Result<Capture, String> {
+    let result = sqlx::query(
+        "INSERT INTO captures (text, status) VALUES (?, 'inbox')"
+    )
+    .bind(&text)
+    .execute(pool.inner())
+    .await
+    .map_err(|e| e.to_string())?;
+
+    let row = sqlx::query(
+        "SELECT id, text, status, created_at FROM captures WHERE id = ?"
+    )
+    .bind(result.last_insert_rowid())
+    .fetch_one(pool.inner())
+    .await
+    .map_err(|e| e.to_string())?;
+
+    use sqlx::Row;
+    Ok(Capture {
+        id:         row.get("id"),
+        text:       row.get("text"),
+        status:     row.get("status"),
+        created_at: row.get("created_at"),
+    })
+}
+
+#[tauri::command]
+pub async fn update_capture_status(
+    pool:   State<'_, Pool<Sqlite>>,
+    id:     i64,
+    status: String,
+) -> Result<(), String> {
+    sqlx::query("UPDATE captures SET status = ? WHERE id = ?")
+        .bind(&status).bind(id)
+        .execute(pool.inner())
+        .await
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn delete_capture(
+    pool: State<'_, Pool<Sqlite>>,
+    id:   i64,
+) -> Result<(), String> {
+    sqlx::query("DELETE FROM captures WHERE id = ?")
         .bind(id).execute(pool.inner()).await.map_err(|e| e.to_string())?;
     Ok(())
 }

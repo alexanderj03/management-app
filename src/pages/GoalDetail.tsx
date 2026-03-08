@@ -33,7 +33,7 @@ const formatDate = (d: string) => {
 
 const formatDateTime = (dt: string) => {
   if (!dt) return "";
-  const d = new Date(dt);
+  const d = new Date(dt.endsWith("Z") ? dt : dt + "Z");
   return d.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric" }) +
     " · " + d.toLocaleTimeString("en-AU", { hour: "2-digit", minute: "2-digit" });
 };

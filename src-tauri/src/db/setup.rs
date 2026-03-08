@@ -76,5 +76,15 @@ pub async fn run_migrations(pool: &Pool<Sqlite>) -> Result<(), sqlx::Error> {
         )"
     ).execute(pool).await?;
 
+    // ── captures ─────────────────────────────────────────────────────────────
+    sqlx::query(
+        "CREATE TABLE IF NOT EXISTS captures (
+            id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            text       TEXT    NOT NULL,
+            status     TEXT    NOT NULL DEFAULT 'inbox',
+            created_at TEXT    NOT NULL DEFAULT (datetime('now'))
+        )"
+    ).execute(pool).await?;
+
     Ok(())
 }

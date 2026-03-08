@@ -81,3 +81,12 @@ export interface Milestone {
   done:     boolean;
   position: number;
 }
+
+export type CaptureStatus = "inbox" | "converted" | "dismissed";
+
+export interface Capture {
+  id:         number;
+  text:       string;
+  status:     CaptureStatus;
+  created_at: string;
+}

@@ -15,7 +15,7 @@ export const favColors: string[] = [
 
 export const navMain: NavItem[] = [
   { icon: "🏠", label: "Home",       path: "/home" },
-  { icon: "🔔", label: "Inbox",      path: "/inbox" },
+  { icon: "🔔", label: "Capture",      path: "/inbox" },
   { icon: "📁", label: "Portfolios", path: "/portfolios" },
   { icon: "🎯", label: "Goals",      path: "/goals" },
 ];

@@ -56,6 +56,10 @@ pub fn run() {
             commands::add_milestone,
             commands::toggle_milestone,
             commands::delete_milestone,
+            commands::get_captures,
+            commands::add_capture,
+            commands::update_capture_status,
+            commands::delete_capture,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

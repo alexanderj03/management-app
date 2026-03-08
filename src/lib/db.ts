@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { Task, NewTaskInput, Project, NewProjectInput, Goal, NewGoalInput, GoalNote, Milestone } from "../types";
+import type { Task, NewTaskInput, Project, NewProjectInput, Goal, NewGoalInput, GoalNote, Milestone, Capture } from "../types";
 
 // ─── Tasks ────────────────────────────────────────────────────────────────────
 
@@ -44,3 +44,10 @@ export const getMilestones     = (goalId: number): Promise<Milestone[]> => invok
 export const addMilestone      = (goalId: number, text: string)         => invoke<Milestone>("add_milestone", { goalId, text });
 export const toggleMilestone   = (id: number, done: boolean)            => invoke<void>("toggle_milestone", { id, done });
 export const deleteMilestone   = (id: number)                           => invoke<void>("delete_milestone", { id });
+
+// ─── Captures ─────────────────────────────────────────────────────────────────
+
+export const getCaptures          = (): Promise<Capture[]>              => invoke<Capture[]>("get_captures");
+export const addCapture           = (text: string)                      => invoke<Capture>("add_capture", { text });
+export const updateCaptureStatus  = (id: number, status: string)        => invoke<void>("update_capture_status", { id, status });
+export const deleteCapture        = (id: number)                        => invoke<void>("delete_capture", { id });
